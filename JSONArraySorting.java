@@ -28,24 +28,17 @@ public class JSONArraySorting {
 
     public static JSONArray sortJsonArray(String jsonString) {
         JSONArray jsonArray = new JSONArray(jsonString);
-        JSONArray sortedJsonArray = new JSONArray();
 
-        List<JSONObject> jsonObjectArray = new ArrayList<JSONObject>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            jsonObjectArray.add(jsonArray.getJSONObject(i));
-        }
-        Collections.sort(jsonObjectArray, new Comparator<JSONObject>() {   
-            @Override
-            public int compare(JSONObject a, JSONObject b) {
-                String valA = (String) a.get("ID");
-                String valB = (String) b.get("ID");
-                return valA.compareTo(valB);
-            }
+        List<JSONObject> jsonObjectArray = new ArrayList<>();
+        jsonArray.forEach(value -> jsonObjectArray.add((JSONObject)value));
+        jsonObjectArray.sort((o1, o2) -> {
+            String valA = (String) o1.get("ID");
+            String valB = (String) o2.get("ID");
+            return valA.compareTo(valB);
         });
 
-        for (int i = 0; i < jsonObjectArray.size(); i++) {
-            sortedJsonArray.put(jsonObjectArray.get(i));
-        }
+        JSONArray sortedJsonArray = new JSONArray();
+        jsonObjectArray.forEach(sorted -> sortedJsonArray.put(sorted));
 
         return sortedJsonArray;
     }
